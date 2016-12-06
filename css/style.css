@@ -1,24 +1,29 @@
+
+header {
+  width: 80%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
 body {
+  padding-left: 10%;
+  padding-right: 10%;
   text-align: center;
 }
 h1 {
   margin: 5px;
 }
 ul {
-  width: auto;
   list-style-type: none;
-  margin: 0;
-  padding-left: 60px;
-  padding-right: 20px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 li {
-  width: auto;
-  padding-left: 20px;
   display: inline;
   float: left;
 }
 #worldmap {
-  padding: 5px;
+  display:block;
+  margin: 5px;
   border-style: solid;
   border-width: thin;
   border-color: steelblue;
@@ -40,9 +45,17 @@ li {
   border: 1px solid;
   display: none;
 }
+#maparea {
+  display: block;
+  width: 80%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
 #chartarea {
-  width:600px;
-  padding: 10px;
+  display: block;
+  width: 50%;
+  padding-left: 25%;
+  padding-right: 25%;
 }
 
 .chart div {
