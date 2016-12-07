@@ -107,6 +107,7 @@ var BAR_CHART = (function() {
               return i * (barWidth + barOffset); })
             .attr("y",function(d) { return svgHeight - (+d.mean); })
             .text(function(d) { return d.age_group + "\n" + (100 * d.mean).toFixed(0) + "%"; })
+              .style("color", "darkgray")
               .style("text-align", "center");
         
 
