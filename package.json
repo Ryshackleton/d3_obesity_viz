@@ -1,0 +1,27 @@
+{
+  "name": "d3_obesity_viz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha -w test.js",
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryshackleton/d3_obesity_viz.git"
+  },
+  "author": "Ryan Shackleton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ryshackleton/d3_obesity_viz/issues"
+  },
+  "homepage": "https://github.com/Ryshackleton/d3_obesity_viz#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "supertest": "^2.0.1"
+  }
+}
