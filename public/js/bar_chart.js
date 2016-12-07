@@ -1,11 +1,16 @@
-var BAR_CHART = (function(exports) {
+// sizing options
+var barWidth = 30
+  , barOffset = 10 
+  , svgHeight = 250;
+
+var BAR_CHART = (function() {
   
   // returns the default scale for the bars, scaled to the max of the mean values of the data
   var barscale = function(data) {
     return d3.scale.linear()
-          .domain([0, 1])
+          .domain([1, 0])
 //          .domain([0, d3.max(data, function(d) { return d.mean; })])
-          .range([0, 800]);
+          .range([svgHeight, 0]);
   };
   
   var colors = colorbrewer.Blues[9]
@@ -51,8 +56,14 @@ var BAR_CHART = (function(exports) {
             .transition()
             .duration(1500)
             .style("background-color", function(d) { return color(d.mean) })
-            .style("width", function(d) { return x(d.mean) + "px"; })
-            .text(function(d) { return d.age_group + " - " + (100 * d.mean).toFixed(0) + "%"; });
+            .style("height", function(d) { return x(+d.mean) + "px"; })
+            .style("width", barWidth + "px")
+            .attr("x",function(d,i) {
+              return i * (barWidth + barOffset); })
+            .attr("y",function(d) { return svgHeight - (+d.mean); })
+            .text(function(d) { return d.age_group + "\n" + (100 * d.mean).toFixed(0) + "%"; })
+              .style("color", "darkgray")
+              .style("text-align", "center");
 
         document.getElementById("statusmessage").innerHTML = "";
       });
@@ -85,16 +96,23 @@ var BAR_CHART = (function(exports) {
           .selectAll("div")
             .data(data)
           .enter().append("div")
+            .style("height", function(d) { return x(d.mean) + "px"; })
             .style("width", 0 )
             .style("background-color", function(d) { return color(d.mean) })
             .transition()
             .duration(800)
-            .style("width", function(d) { return x(+d.mean) + "px"; })
-            .text(function(d) { return d.age_group + " - " + (100 * d.mean).toFixed(0) + "%"; });
+            .style("height", function(d) { return x(+d.mean) + "px"; })
+            .style("width", barWidth + "px")
+            .attr("x",function(d,i) {
+              return i * (barWidth + barOffset); })
+            .attr("y",function(d) { return svgHeight - (+d.mean); })
+            .text(function(d) { return d.age_group + "\n" + (100 * d.mean).toFixed(0) + "%"; })
+              .style("text-align", "center");
+        
 
         document.getElementById("statusmessage").innerHTML = "";
       });
     }
   };
-})(this);
+})();
                  

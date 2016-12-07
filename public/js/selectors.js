@@ -20,8 +20,14 @@ addEventListeners(obeseSelect);
 // build selector with country list
 countrySelect = document.getElementById( 'countryselect' );
 d3.csv("/data/locations.csv", function(data) {
+  // soverign countries have 3 letter country codes
+  // as opposed to regions, which have numbers or < 3 letters
+  // so omit the regions
+  var strict3LetterCountryCode = /[A-Z]{3}/;
   data.forEach(function(d) {
-     countrySelect.add(new Option(d.location_name));
+    if( strict3LetterCountryCode.test(d.location) ) {
+      countrySelect.add(new Option(d.location_name));
+    }
   });
   addEventListeners(countrySelect);
 
@@ -30,11 +36,12 @@ d3.csv("/data/locations.csv", function(data) {
 
 
 function atts(){
-  return { countryname: countrySelect.value,
-            sex: "both",
-            obese_overweight: obeseSelect.value,
-            year: yearSelect.value
-         };
+  return {
+    countryname: countrySelect.value,
+    sex: "both",
+    obese_overweight: obeseSelect.value,
+    year: yearSelect.value
+  };
 }
 
 function updateCountrySelect(newCountryName)
