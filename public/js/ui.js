@@ -5,7 +5,7 @@ var yearSelect = document.getElementById( 'yearselect' )
   , obeseSelect = document.getElementById( 'obeseselect' )
   , barChart = BARCHART.obesity
   , worldMap = MAP.worldClickable
-  , obesityCSVFile = "/data/IHME_GBD_2013_BOTHSEX_small.CSV"
+  , obesityCSVFileRoot = "/data/IHME_GBD_BOTHSEX_"
   , locationsCSVFile = "/data/locations.csv";
 
 /* build selector with year list */
@@ -60,7 +60,7 @@ function initBarsAndMaps() {
       addEventListeners(countrySelect);
 
       barChart.sizeUpdate({width:bodyWidth, height:bodyWidth/2, barMargin: 2});
-      barChart.init('.obesityBar', obesityCSVFile, atts());
+      barChart.init('.obesityBar', obesityCSVFileRoot, atts());
     }
   });
 }

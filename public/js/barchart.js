@@ -37,7 +37,7 @@ BARCHART.obesity = function() {
 
   /***** PUBLIC *****/
   
-  var mCSVFile = ""
+  var mCSVFileRoot = ""
     , mBarDivTag = '.myBars'
     , mSvgHeight = 100
     , mSvgWidth = 100
@@ -60,7 +60,7 @@ BARCHART.obesity = function() {
   */
   var init = function(divTag,csvFile,attributes){
     mBarDivTag = divTag;
-    mCSVFile = csvFile;
+    mCSVFileRoot = csvFile;
     graphUpdate(attributes);
   };
   
@@ -76,7 +76,7 @@ BARCHART.obesity = function() {
       graphUpdate(atts);
   */
   var graphUpdate = function(atts){
-    d3.csv(mCSVFile, function(d) {
+    d3.csv(mCSVFileRoot+atts.year+".CSV", function(d) {
       if( d.location_name === atts.countryname 
         && d.sex === atts.sex && d.metric === atts.obese_overweight
         && d.year === atts.year && !d.age_group.includes("standard") ) {
@@ -132,7 +132,7 @@ BARCHART.obesity = function() {
   return {
     /* variables */
     mBarDivTag: mBarDivTag, 
-    mCSVFile: mCSVFile,
+    mCSVFileRoot: mCSVFileRoot,
     mSvgHeight: mSvgHeight,
     mSvgWidth: mSvgWidth,
     mBarMargin: mBarMargin,
