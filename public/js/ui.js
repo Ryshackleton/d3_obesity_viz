@@ -28,14 +28,12 @@ window.addEventListener("resize", initBarsAndMaps );
 /* add a listener for the countryclick event, which is dispatched
  * when a country is clicked on in the map */
 window.addEventListener("countryclick", function(countryclick){
+    updateCountrySelect(countryclick.detail.countryname);
     barChart.graphUpdate(countryclick.detail);
-    updateCountrySelect(countryclick.countryname);
 });
 
 /* sets up the bars and maps based on the 'page-content' width */
 function initBarsAndMaps() {
-  document.getElementById('status').innerHTML = "Loading data...";
-  
   /** initialize world map
     * then link the bar chart update to the 
     * map's click functionality
@@ -62,8 +60,7 @@ function initBarsAndMaps() {
       addEventListeners(countrySelect);
 
       barChart.sizeUpdate({width:bodyWidth, height:bodyWidth/2, barMargin: 2});
-      barChart.init('.obesityBar',obesityCSVFile,atts());
-      document.getElementById('status').innerHTML = "";
+      barChart.init('.obesityBar', obesityCSVFile, atts());
     }
   });
 }

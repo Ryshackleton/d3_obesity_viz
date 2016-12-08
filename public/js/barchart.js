@@ -55,7 +55,7 @@ BARCHART.obesity = function() {
   };
 
   /* init function to set the barchart up with the appropriate file 
-   * useage: init('filename.csv',attributes);
+   * useage: init(divTag,'filename.csv',attributes);
    *
   */
   var init = function(divTag,csvFile,attributes){
