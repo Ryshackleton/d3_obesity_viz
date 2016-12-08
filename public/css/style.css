@@ -22,6 +22,7 @@ ul li {
   margin-right: 10px;
   margin-bottom: auto;
   margin-top: auto;
+  vertical-align: center;
 }
 .worldmap {
   border-style: solid;

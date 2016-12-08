@@ -6,7 +6,8 @@ var yearSelect = document.getElementById( 'yearselect' )
   , barChart = BARCHART.obesity
   , worldMap = MAP.worldClickable
   , obesityCSVFileRoot = "/data/IHME_GBD_BOTHSEX_"
-  , locationsCSVFile = "/data/locations.csv";
+  , locationsCSVFile = "/data/locations.csv"
+  , animation;
 
 /* build selector with year list */
 for(var i=1990;i<2014;i++) {
@@ -31,6 +32,59 @@ window.addEventListener("countryclick", function(countryclick){
     updateCountrySelect(countryclick.detail.countryname);
     barChart.graphUpdate(countryclick.detail);
 });
+
+/* setup simple animation to toggle through the year select */
+var startButton = document.getElementById("animationButton");
+setupAnimation();
+
+/* sets up the animation and sets up appropriate click events */
+function setupAnimation() {
+  startButton.value = "Animate Years";
+  if(startButton.addEventListener) {
+      startButton.addEventListener("click", startAnim);
+  }
+  else if(startButton.attachEvent) {
+      startButton.attachEvent("onclick", startAnim);
+  }
+  else {
+      startButton.onchange = startAnim; 
+  }
+}
+
+/* starts animation and sets up appropriate click events */
+function startAnim() {
+  startButton.value = "Stop Animation";
+  if(startButton.addEventListener) {
+      startButton.removeEventListener("click", startAnim);
+      startButton.addEventListener("click", stopAnim);
+  }
+  else if(startButton.attachEvent) {
+      startButton.removeEvent("onclick", startAnim);
+      startButton.attachEvent("onclick", stopAnim);
+  }
+  else {
+      startButton.onclick = stopAnim; 
+  }
+  advanceYear();
+}
+
+/* stops a running animation and sets up the animation again */
+function stopAnim() {
+  clearTimeout(animate);
+  setupAnimation();
+}
+
+/* advances the year recursively */
+function advanceYear() {
+  if( yearSelect.selectedIndex < yearSelect.options.length - 1 ){
+    yearSelect.selectedIndex++;
+  }
+  else {
+    yearSelect.selectedIndex = 0;
+  }
+  updateBarGraph();
+  animate = setTimeout(advanceYear, 1500);
+}
 
 /* sets up the bars and maps based on the 'page-content' width */
 function initBarsAndMaps() {

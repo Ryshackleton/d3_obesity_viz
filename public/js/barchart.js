@@ -119,7 +119,7 @@ BARCHART.obesity = function() {
 
       chartDivs
         .transition()
-        .duration(1500)
+        .duration(1000)
         .style("background-color", function(d) { return color(d.mean); })
         .style("height", function(d) { return x(+d.mean) + "px"; })
         .style("width", barWidth + "px")
