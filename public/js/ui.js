@@ -5,7 +5,7 @@ var yearSelect = document.getElementById( 'yearselect' )
   , obeseSelect = document.getElementById( 'obeseselect' )
   , barChart = BARCHART.obesity
   , worldMap = MAP.worldClickable
-  , obesityCSVFile = "/data/IHME_GBD_2013_BOTHSEX_min.CSV"
+  , obesityCSVFile = "/data/IHME_GBD_2013_BOTHSEX_small.CSV"
   , locationsCSVFile = "/data/locations.csv";
 
 /* build selector with year list */
