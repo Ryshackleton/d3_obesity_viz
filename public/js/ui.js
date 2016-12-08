@@ -34,6 +34,8 @@ window.addEventListener("countryclick", function(countryclick){
 
 /* sets up the bars and maps based on the 'page-content' width */
 function initBarsAndMaps() {
+  document.getElementById('status').innerHTML = "Loading data...";
+  
   /** initialize world map
     * then link the bar chart update to the 
     * map's click functionality
@@ -61,6 +63,7 @@ function initBarsAndMaps() {
 
       barChart.sizeUpdate({width:bodyWidth, height:bodyWidth/2, barMargin: 2});
       barChart.init('.obesityBar',obesityCSVFile,atts());
+      document.getElementById('status').innerHTML = "";
     }
   });
 }
