@@ -1,6 +1,10 @@
 var MAP = MAP || {}; 
 
 MAP.worldClickable = function() {
+  /* a simple world map module modified heavily from:
+   * http://www.digital-geography.com/d3-js-mapping-tutorial-1-set-initial-webmap/#.WEYRScMrJE6
+   * and
+   * https://gist.github.com/dnprock/bb5a48a004949c7c8c60 */
 
   /***** PRIVATE ******/
   var mWidth = 1
@@ -16,6 +20,8 @@ MAP.worldClickable = function() {
     mWidth = width;
     mHeight = height;
 
+
+    /* map setup: modified from http://www.digital-geography.com/d3-js-mapping-tutorial-1-set-initial-webmap/#.WEYRScMrJE6 */
     var svg = d3.select(mMapDivTag)
         .attr("width", mWidth)
         .attr("height", mHeight);
