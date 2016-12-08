@@ -6,36 +6,38 @@
       <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="textarea">
-    <h1>What age groups are the most obese?</h1>
-      <p>This graphic explores the prevalence of different age groups for both men and women (undifferentiated) around the world.  Select a year and whether you want to display prevalence of the population who are obese or overweight.  Then select a country via the dropdown or by clicking on the map.  The bar chart below updated automatically, and you can observe the distribution of obesity each country's population.</p>
-    <div>
-    <ul id="selectors">
+  <div id="page-content">
+    <h1>What age groups have prevalent obesity around the world?</h1>
+    <p>This graphic explores the prevalence of different age groups for both men and women (undifferentiated) around the world.
+    </p>
+    <ol>
+      <li>First, select a year and whether you want to display prevalence of the population who are obese or overweight.</li>
+      <li>Then select a country via the dropdown or by clicking on the map.</li>
+      <li>The country can also be selected by clicking on the country on the map. (you can also pan/zoom the map)</li>
+    </ol>
+    <p>The bar chart below updates automatically, and you can observe the distribution of obesity each country's population.</p>
+    <ul>
       <li><h4>Country <select id="countryselect"></select></h4></li>
       <li><h4>Obese/Overweight <select id="obeseselect"></select></h4></li>
       <li><h4>Year <select id="yearselect"></select></h4></li>
     </ul>
-    </div>
  
-    <div id="maparea">
-      <div id="tooltip-container"></div>
-      <svg id="worldmap"></svg>
-    </div>
-    
-    <div id=chartarea>
-      <div class="chart"></div>
-      <h4 id="statusmessage"></h4>
+    <div id="tooltip-container"></div>
+    <svg class="worldmap"></svg>
+
+    <div class="chartArea">
+      <div class="obesityBar"></div>
     </div>
   </div>
   
   <script src="//code.jquery.com/jquery-2.0.0.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"  charset="utf-8"></script>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="https://d3js.org/topojson.v1.min.js"></script>
   <script src="js/colorbrewer.js"></script>
   
-  <script src="js/bar_chart.js"></script>
-  <script src="js/selectors.js"></script>
+  <script src="js/barchart.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/ui.js"></script>
 
 </body>
 </html>
