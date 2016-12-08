@@ -1,3 +1,4 @@
+location,location_name,year,age_group,sex,metric,mean
 AFG,Afghanistan,1990,2 to 4 yrs,both,overweight,0.18
 AFG,Afghanistan,1990,2 to 4 yrs,both,obese,0.056
 AFG,Afghanistan,1990,"2 to 19 yrs, age-standardized",both,obese,0.051
