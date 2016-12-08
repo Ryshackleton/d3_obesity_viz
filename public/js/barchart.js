@@ -115,7 +115,8 @@ BARCHART.obesity = function() {
             .style("float","left");
       }
 
-      var barWidth = (mSvgWidth * 0.99 - (chartDivs.size() * (mBarMargin*2))) / (chartDivs.size());
+      var barWidth = (mSvgWidth - (chartDivs.size() * (mBarMargin*2))) / (chartDivs.size());
+      barWidth = Math.floor(barWidth);
 
       chartDivs
         .transition()

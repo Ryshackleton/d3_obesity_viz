@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html>
 <head>
   <meta charset="UTF-8">
   <title>D3 Bar Chart</title>
@@ -7,23 +7,13 @@
 </head>
 <body>
   <div id="page-content">
-    <h1>In which age groups is obesity most prevalent around the world?</h1>
-    <h4>This graphic explores the prevalence of obesity in different age groups around the world, and how the prevalence of obesity has changed through time.
-    </h4>
-    <ol>
-      <li>First, select a year and whether you want to display prevalence of the population who are obese or overweight.</li>
-      <li>Then select a country via the dropdown or by clicking on the map.</li>
-      <li>The country can also be selected by clicking on the country on the map. (you can also pan/zoom the map)</li>
-      <li>Click the "Animate Years" button to see how obesity changes over time.</li>
-    </ol>
-    <h4>The bar chart below updates automatically, and you can observe the distribution of obesity each country's population.</h4>
+    <h1>Prevalence of obesity around the world</h1>
+    <h4>This graphic explores the global prevalence of obesity by age group, and how obesity has changed through time.  Use the dropdown menus to choose the country, obese or overweight, and year.  See how obesity has changed over time in a country by selecting “Animate Years.”  The country can also be selected by clicking directly on the map.
     <ul>
       <li><h4>Country <select id="countryselect"></select></h4></li>
       <li><h4>Obese/Overweight <select id="obeseselect"></select></h4></li>
       <li><h4>Year <select id="yearselect"><input type="button" id="animationButton" value="Animate Years"/></select></h4></li>
-      <li></li>
     </ul>
- 
     <div id="tooltip-container"></div>
     <svg class="worldmap"></svg>
 
