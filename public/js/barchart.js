@@ -29,7 +29,7 @@ BARCHART.obesity = function() {
           .domain([1, 0])
           .range([mSvgHeight, 0]);
   };
-  
+
   /* mapping function for colormapper, uses colorbrewer */
   var colors = colorbrewer.Blues[9]
     .map(function(rgb) { return d3.hsl(rgb); });
@@ -77,7 +77,7 @@ BARCHART.obesity = function() {
   */
   var graphUpdate = function(atts){
     d3.csv(mCSVFileRoot+atts.year+".CSV", function(d) {
-      if( d.location_name === atts.countryname 
+      if( d.location === atts.countrycode
         && d.sex === atts.sex && d.metric === atts.obese_overweight
         && d.year === atts.year && !d.age_group.includes("standard") ) {
           return {
@@ -96,7 +96,7 @@ BARCHART.obesity = function() {
       var md = d3.max(data, function(d) { return d.mean; });
       var color = d3.scale.linear()
         .range(colors)
-        .domain([md * 0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7, md*0.8, md*0.9]);
+        .domain([0.0, md * 0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7, 2]);
 
       var chartDivs = d3.select(mBarDivTag)
         .selectAll("div")
