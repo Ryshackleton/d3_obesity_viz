@@ -147,6 +147,10 @@ MAP.worldClickable = function() {
               return countryMeans.hasOwnProperty(d.properties.adm0_a3)
                 ? color(countryMeans[d.properties.adm0_a3]) : color(100);
               })
+            .attr("stroke-width",function(d) {
+              return selectedAtts.countrycode === d.properties.adm0_a3
+                  ? "2px" : "0.5px" ;
+              })
             /* use click event to trigger external updates */
             .on("click", function (d) {
               var countryClickEvent = new CustomEvent("countryclick", {

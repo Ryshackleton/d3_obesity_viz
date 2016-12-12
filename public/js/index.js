@@ -30,7 +30,7 @@ window.addEventListener("resize", initBarsAndMaps );
  * when a country is clicked on in the map */
 window.addEventListener("countryclick", function(countryclick){
     updateCountrySelect(countryclick.detail.countrycode);
-    barChart.graphUpdate(countryclick.detail);
+    initBarsAndMaps();
 });
 
 /* setup simple animation to toggle through the year select */
