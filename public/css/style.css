@@ -33,11 +33,14 @@ ul li {
   margin-right: auto;
 }
 #countries {
-  fill: #cde;
   stroke: black;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
+.data-legend-color {
+  background-color: #fff;
+}
+
 #countries .active {
   fill: #89a;
 }
