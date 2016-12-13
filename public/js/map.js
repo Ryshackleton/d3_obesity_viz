@@ -20,7 +20,6 @@ MAP.worldClickable = function() {
     mWidth = width;
     mHeight = height;
 
-
     /* map setup: modified from http://www.digital-geography.com/d3-js-mapping-tutorial-1-set-initial-webmap/#.WEYRScMrJE6 */
     var svg = d3.select(mMapDivTag)
         .attr("width", mWidth)
@@ -62,11 +61,6 @@ MAP.worldClickable = function() {
         console.error("map.js MAP.worldClickable.init() - Problem reading countries json file.");
         return;
       }
-      /* mapping function for colormapper, uses colorbrewer */
-      var colors = colorbrewer.Greens[9]
-          .map(function (rgb) {
-            return d3.hsl(rgb);
-          });
 
       countryMeans = {};
       d3.csv("/data/IHME_GBD_COUNTRY_MEANS.CSV", function (d) {
@@ -85,10 +79,7 @@ MAP.worldClickable = function() {
           return;
         }
 
-        var md = d3.max(meanData, function (d) {
-          return d.mean;
-          });
-
+        /* mapping function for colormapper, uses colorbrewer */
         var colors = colorbrewer.Blues[9]
           .map(function(rgb) { return d3.hsl(rgb); });
 
