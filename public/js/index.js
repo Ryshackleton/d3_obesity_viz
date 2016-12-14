@@ -32,12 +32,12 @@ window.addEventListener("countryclick", function(countryclick) {
 
 /* setup country scale button */
 var countryScaleButton = document.getElementById("countryScaleButton");
-setupScale();
 function setupScale() {
   if(countryScaleButton.addEventListener) {
     countryScaleButton.addEventListener("click", worldMap.toggleMapScale);
   }
 }
+setupScale();
 
 /* setup simple animation to toggle through the year select */
 var startButton = document.getElementById("animationButton");
@@ -83,7 +83,7 @@ function advanceYear() {
 }
 
 /* sets up the bars and maps based on the 'page-content' width */
-  function updateBarsAndMaps() {
+function updateBarsAndMaps() {
 
   /** re-initialize world map
    */
@@ -131,7 +131,7 @@ function buildCountrySelect(data) {
       countrySelect.add(newOpt);
     }
   });
-  countrySelect.addEventListener("change",updateBarGraph);
+  countrySelect.addEventListener("change",updateBarsAndMaps);
 }
 
 /* updates the bar graph with the currently selected attributes */
