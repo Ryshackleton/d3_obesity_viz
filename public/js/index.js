@@ -30,6 +30,15 @@ window.addEventListener("countryclick", function(countryclick) {
   updateBarsAndMaps();
   });
 
+/* setup country scale button */
+var countryScaleButton = document.getElementById("countryScaleButton");
+setupScale();
+function setupScale() {
+  if(countryScaleButton.addEventListener) {
+    countryScaleButton.addEventListener("click", worldMap.toggleMapScale);
+  }
+}
+
 /* setup simple animation to toggle through the year select */
 var startButton = document.getElementById("animationButton");
 setupAnimation();
@@ -43,12 +52,6 @@ function setupAnimation() {
   if(startButton.addEventListener) {
       startButton.addEventListener("click", startAnim);
   }
-  else if(startButton.attachEvent) {
-      startButton.attachEvent("onclick", startAnim);
-  }
-  else {
-      startButton.onchange = startAnim; 
-  }
 }
 
 /* starts animation and sets up appropriate click events */
@@ -57,13 +60,6 @@ function startAnim() {
   if(startButton.addEventListener) {
       startButton.removeEventListener("click", startAnim);
       startButton.addEventListener("click", stopAnim);
-  }
-  else if(startButton.attachEvent) {
-      startButton.removeEvent("onclick", startAnim);
-      startButton.attachEvent("onclick", stopAnim);
-  }
-  else {
-      startButton.onclick = stopAnim; 
   }
   advanceYear();
 }

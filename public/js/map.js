@@ -9,10 +9,45 @@ MAP.worldClickable = function() {
   /***** PRIVATE ******/
   var mWidth = 1
     , mHeight = 1 
-    , mMapSelection;
+    , mMapSelection
+    , mProjection
+    , mPath
+    , mCountryMeans = {}
+    , mScaleDenom = 1.0
+    , mIsMapScaled = false;
 
   /***** PUBLIC ******/
   var mMapDivTag = ".worldmap"
+
+  var countryScale = function(d) {
+      if( mIsMapScaled ) {
+        var cent = mPath.centroid(d);
+        var scale = mCountryMeans.hasOwnProperty(d.properties.adm0_a3)
+          ? "scale(" + mCountryMeans[d.properties.adm0_a3] / mScaleDenom + ")"
+          : "scale(1.0)";
+        var translate = "translate(-" + cent.join(",-") + ")";
+        var translateBack = "translate(" + cent.join(",") + ")";
+        return translateBack + scale + translate;
+      }
+      return "scale(1.0)";
+  };
+
+  var toggleMapScale = function(divTag,width,height,selectedAtts){
+    d3.json("/data/countries.topo.notrans.json", function (error, topology) {
+      if (error) {
+        console.error("map.js MAP.worldClickable.init() - Problem reading countries json file.");
+        return;
+      }
+        mMapSelection.selectAll("path")
+          .data(topojson.feature(topology, topology.objects.countries).features)
+            .transition()
+            .duration(1000)
+          .attr("transform", countryScale );
+    });
+    mIsMapScaled = !mIsMapScaled;
+  };
+
+
 
   var init = function(divTag,width,height,selectedAtts) {
 
@@ -25,13 +60,13 @@ MAP.worldClickable = function() {
         .attr("width", mWidth)
         .attr("height", mHeight);
 
-    var projection = d3.geo.mercator()
+    mProjection = d3.geo.cylindricalEqualArea()
         .scale((mWidth + 1) / 2 / Math.PI)
         .translate([mWidth / 2, mHeight / 2])
         .precision(.1);
 
-    var path = d3.geo.path()
-        .projection(projection);
+    mPath = d3.geo.path()
+        .projection(mProjection);
 
     /* mouseover functionality - modified from:
      (https://gist.github.com/dnprock/bb5a48a004949c7c8c60) */
@@ -40,12 +75,12 @@ MAP.worldClickable = function() {
     svg.append("path")
         .datum(graticule)
         .attr("class", "graticule")
-        .attr("d", path);
+        .attr("d", mPath);
 
     svg.append("path")
         .datum(graticule)
         .attr("class", "choropleth")
-        .attr("d", path);
+        .attr("d", mPath);
     /* end mouseover functionality */
 
     /* for zooming functionality */
@@ -62,11 +97,11 @@ MAP.worldClickable = function() {
         return;
       }
 
-      countryMeans = {};
+      mCountryMeans = {};
       d3.csv("/data/IHME_GBD_COUNTRY_MEANS.CSV", function (d) {
         if (d.sex === selectedAtts.sex && d.metric === selectedAtts.obese_overweight
             && d.year === selectedAtts.year) {
-          countryMeans[d.location] = +d.mean;
+          mCountryMeans[d.location] = +d.mean;
           return {
             "countrycode": d.location,
             "countryname": d.location_name,
@@ -84,6 +119,7 @@ MAP.worldClickable = function() {
           .map(function(rgb) { return d3.hsl(rgb); });
 
         var md = d3.max(meanData, function(d) { return d.mean; });
+        mScaleDenom = d3.median(meanData, function(d) { return d.mean; });
         var color = d3.scale.linear()
           .range(colors)
           // adding a 2 here at the end of the scale for "no data" values
@@ -132,16 +168,22 @@ MAP.worldClickable = function() {
           .enter()
             .append("path")
             .attr("id", "countries")
-            .attr("d", path)
+            .attr("d", mPath)
             .attr("class", "active")
             .attr("fill", function (d) {
-              return countryMeans.hasOwnProperty(d.properties.adm0_a3)
-                ? color(countryMeans[d.properties.adm0_a3]) : color(100);
+              return mCountryMeans.hasOwnProperty(d.properties.adm0_a3)
+                ? color(mCountryMeans[d.properties.adm0_a3]) : color(100);
               })
+            .attr("fill-opacity", "0.95")
             .attr("stroke-width",function(d) {
               return selectedAtts.countrycode === d.properties.adm0_a3
-                  ? "2px" : "0.5px" ;
+                  ? "1px" : "0.2px" ;
               })
+            .attr("stroke", function(d) {
+              return selectedAtts.countrycode === d.properties.adm0_a3
+                ? "yellow" : "black" ;
+            })
+            .attr("transform", countryScale )
             /* use click event to trigger external updates */
             .on("click", function (d) {
               var countryClickEvent = new CustomEvent("countryclick", {
@@ -160,8 +202,8 @@ MAP.worldClickable = function() {
             .on("mousemove", function (d) {
               $(this).attr("class", ".active");
               var html = "";
-              var mean = countryMeans.hasOwnProperty(d.properties.adm0_a3)
-                ? Math.floor(countryMeans[d.properties.adm0_a3] * 100) + "%" : 'no data';
+              var mean = mCountryMeans.hasOwnProperty(d.properties.adm0_a3)
+                ? Math.floor(mCountryMeans[d.properties.adm0_a3] * 100) + "%" : 'no data';
               html += "<div class=\"tooltip_kv\">";
               html += "<span class=\"tooltip_key\">";
               html += d.properties.name_long;
@@ -170,7 +212,7 @@ MAP.worldClickable = function() {
               html += "</div>";
 
               $("#tooltip-container").html(html);
-              $(this).attr("fill-opacity", "0.8");
+              $(this).attr("fill-opacity", "0.6");
               $("#tooltip-container").show();
 
               var map_width = $('.choropleth')[0].getBoundingClientRect().width;
@@ -187,11 +229,12 @@ MAP.worldClickable = function() {
               }
             })
             .on("mouseout", function () {
-              $(this).attr("fill-opacity", "1.0");
+              $(this).attr("fill-opacity", "0.95");
               $("#tooltip-container").hide();
             });
         /* end mouseover functionality */
       });
+
     });
     /* zoom and pan (from: http://www.digital-geography.com/d3-js-mapping-tutorial-1-set-initial-webmap/#.WEYRScMrJE6) */
     var zoom = d3.behavior.zoom()
@@ -199,7 +242,7 @@ MAP.worldClickable = function() {
           mMapSelection.attr("transform", "translate(" +
               d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")")
           mMapSelection.selectAll("path")
-              .attr("d", path.projection(projection));
+              .attr("d", mPath.projection(mProjection));
         });
     svg.call(zoom);
   }
@@ -209,7 +252,8 @@ MAP.worldClickable = function() {
     mMapDivTag: mMapDivTag,
 
     /* functions */
-    init: init
+    init: init,
+    toggleMapScale: toggleMapScale
   };
 
 }();
