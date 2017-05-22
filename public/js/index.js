@@ -6,7 +6,7 @@ var yearSelect = document.getElementById( 'yearselect' )
   , barChart = BARCHART.obesity
   , worldMap = MAP.worldClickable
   , obesityCSVFileRoot = "/data/IHME_GBD_BOTHSEX_"
-  , locationsCSVFile = "/data/locations.csv";
+;
 
 /* build selector with year list */
 for(var i=1990;i<2014;i++) {
@@ -91,9 +91,9 @@ function updateBarsAndMaps() {
   worldMap.init(".worldmap", bodyWidth, bodyWidth / 3, atts());
 
   /* build selector with country list */
-  d3.csv(locationsCSVFile, function (error, data) {
+  d3.json(['data','locations'].join('/'), function (error, data) {
     if (error) {
-      console.error("ui.js - Problem reading locations.csv file");
+      console.error("index.js - Problem reading /data/locations/");
     }
     else {
       if (countrySelect.options === undefined || countrySelect.options.length < 1) {

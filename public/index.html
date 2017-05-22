@@ -5,33 +5,36 @@
   <title>D3 Bar Chart</title>
       <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div id="page-content">
+<div id="page-content">
     <h1>Prevalence of obesity around the world</h1>
-    <h4>This graphic explores the global prevalence of obesity by age group, and how obesity has changed through time.  Use the dropdown menus to choose the country, obese or overweight, and year.  See how obesity has changed over time in a country by selecting “Animate Years.”  The country can also be selected by clicking directly on the map.
+    <h4>This graphic explores the global prevalence of obesity by age group, and how obesity has changed through time.  Use the dropdown menus to choose the country, obese or overweight, and year.  See how obesity has changed over time in a country by selecting “Animate Years.”  The country can also be selected by clicking directly on the map.</h4>
     <ul>
-      <li><h4>Country <select id="countryselect"></select></h4></li>
-      <li><h4>Obese/Overweight <select id="obeseselect"></select></h4></li>
-      <li><h4>Year <select id="yearselect"><input type="button" id="animationButton" value="Animate Years"/></select></h4></li>
-      <li><h4><input type="button" id="countryScaleButton" value="Scale Countries Relative to Global Median"/></select></h4></li>
+        <li><h4>Country <select id="countryselect"></select></h4></li>
+        <li><h4>Obese/Overweight <select id="obeseselect"></select></h4></li>
+        <li><h4>Year <select id="yearselect"><input type="button" id="animationButton" value="Animate Years"/></select></h4></li>
+        <li><h4><input type="button" id="countryScaleButton" value="Scale Countries Relative to Global Median"/></select></h4></li>
     </ul>
     <div id="tooltip-container"></div>
+
     <svg class="worldmap"></svg>
 
     <div class="chartArea">
-      <div class="obesityBar"></div>
+        <div class="obesityBar"></div>
     </div>
-  </div>
-  
-  <script src="https://code.jquery.com/jquery-2.0.0.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="//d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
-  <script src="https://d3js.org/topojson.v1.min.js"></script>
-  <script src="js/colorbrewer.js"></script>
 
-  <script src="js/barchart.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/index.js"></script>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.0.0.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="js/colorbrewer.js"></script>
+
+<script src="js/barchart.js"></script>
+<script src="js/map.js"></script>
+<script src="js/index.js"></script>
 
 </body>
 </html>

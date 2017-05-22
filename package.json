@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/Ryshackleton/d3_obesity_viz#readme",
   "dependencies": {
+    "babyparse": "^0.4.6",
     "express": "^4.14.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "mocha": "^3.2.0",
     "supertest": "^2.0.1"
   }

@@ -76,18 +76,9 @@ BARCHART.obesity = function() {
       graphUpdate(atts);
   */
   var graphUpdate = function(atts){
-    d3.csv(mCSVFileRoot+atts.year+".CSV", function(d) {
-      if( d.location === atts.countrycode
-        && d.sex === atts.sex && d.metric === atts.obese_overweight
-        && d.year === atts.year && !d.age_group.includes("standard") ) {
-          return {
-              "mean": +d.mean,
-              "age_group": d.age_group
-          };
-      }
-    }, function(error,data) {
+    d3.json(['data','agegroup',atts.countrycode,atts.year,atts.obese_overweight].join('/'), function(error,data) {
       if( error ) {
-        console.error("BARCHART.obesity.graphUpdate(); - Problem reading csv file. Check file path.");
+        console.error("BARCHART.obesity.graphUpdate(); - Problem reading json from server.");
         return;
       }
 
