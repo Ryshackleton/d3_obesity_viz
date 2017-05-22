@@ -22,11 +22,14 @@ MAP.worldClickable = function() {
   var countryScale = function(d) {
       if( mIsMapScaled ) {
         var cent = mPath.centroid(d);
+        var negativeCent = [ -cent[0], -cent[1] ];
+        
         var scale = mCountryMeans.hasOwnProperty(d.properties.adm0_a3)
           ? "scale(" + mCountryMeans[d.properties.adm0_a3] / mScaleDenom + ")"
           : "scale(1.0)";
-        var translate = "translate(-" + cent.join(",-") + ")";
+        var translate = "translate(" + negativeCent.join(",") + ")";
         var translateBack = "translate(" + cent.join(",") + ")";
+        
         return translateBack + scale + translate;
       }
       return "scale(1.0)";
@@ -57,18 +60,19 @@ MAP.worldClickable = function() {
     var svg = d3.select(mMapDivTag)
         .attr("width", mWidth)
         .attr("height", mHeight);
-
-    mProjection = d3.geo.cylindricalEqualArea()
+    
+    mProjection = d3.geoEquirectangular()
+    // mProjection = d3.geoCylindricalEqualArea()
         .scale((mWidth + 1) / 2 / Math.PI)
         .translate([mWidth / 2, mHeight / 2])
         .precision(.1);
 
-    mPath = d3.geo.path()
+    mPath = d3.geoPath()
        .projection(mProjection);
 
     /* mouseover functionality - modified from:
      (https://gist.github.com/dnprock/bb5a48a004949c7c8c60) */
-    var graticule = d3.geo.graticule();
+    var graticule = d3.geoGraticule();
 
     svg.append("path")
         .datum(graticule)
@@ -114,7 +118,7 @@ MAP.worldClickable = function() {
     
           var md = d3.max(meanData, function(d) { return d.mean; });
           mScaleDenom = d3.median(meanData, function(d) { return d.mean; });
-          var color = d3.scale.linear()
+          var color = d3.scaleLinear()
               .range(colors)
               // adding a 2 here at the end of the scale for "no data" values
               .domain([0.0, md*0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7,md*0.8, 100.0]);
@@ -232,10 +236,9 @@ MAP.worldClickable = function() {
     });
           
     /* zoom and pan (from: http://www.digital-geography.com/d3-js-mapping-tutorial-1-set-initial-webmap/#.WEYRScMrJE6) */
-    var zoom = d3.behavior.zoom()
+    var zoom = d3.zoom()
         .on("zoom", function () {
-          mMapSelection.attr("transform", "translate(" +
-              d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")")
+          mMapSelection.attr("transform", d3.event.transform);
           mMapSelection.selectAll("path")
               .attr("d", mPath.projection(mProjection));
         });

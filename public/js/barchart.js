@@ -25,7 +25,7 @@ BARCHART.obesity = function() {
 
   /* returns the default scale for the bars, scaled from 1 to 0 */
   var barscale = function(data) {
-    return d3.scale.linear()
+    return d3.scaleLinear()
           .domain([1, 0])
           .range([mSvgHeight, 0]);
   };
@@ -85,7 +85,7 @@ BARCHART.obesity = function() {
       var x = barscale(data);
       
       var md = d3.max(data, function(d) { return d.mean; });
-      var color = d3.scale.linear()
+      var color = d3.scaleLinear()
         .range(colors)
         .domain([0.0, md * 0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7, 2]);
 
