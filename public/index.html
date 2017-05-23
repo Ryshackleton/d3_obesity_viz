@@ -2,7 +2,11 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>D3 Bar Chart</title>
+  <title>Global Obesity Visualization</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="dist/css/style.css">
     <link rel="stylesheet" href="lib/css/d3-tip-v4.css">
     <link rel="stylesheet" href="lib/css/aster.css">
@@ -10,23 +14,42 @@
 
 <body>
 <div id="page-content">
-    <h1>Prevalence of obesity around the world</h1>
-    <h4>This graphic explores the global prevalence of obesity by age group, and how obesity has changed through time.  Use the dropdown menus to choose the country, obese or overweight, and year.  See how obesity has changed over time in a country by selecting “Animate Years.”  The country can also be selected by clicking directly on the map.</h4>
-    <ul>
-        <li><h4>Country <select id="countryselect"></select></h4></li>
-        <li><h4>Obese/Overweight <select id="obeseselect"></select></h4></li>
-        <li><h4>Year <select id="yearselect"><input type="button" id="animationButton" value="Animate Years"/></select></h4></li>
-        <li><h4><input type="button" id="countryScaleButton" value="Scale Countries Relative to Global Median"/></select></h4></li>
-    </ul>
-    <div id="tooltip-container"></div>
-
-
-    <div class="map-and-aster-container">
-        <svg class="worldmap"></svg>
-        <div class="asterArea">
-            <h4 class="asterHeader"></h4>
-            <div class="obesityAster"></div>
+    <div id="page-headers" class="container-fluid">
+        <h1 class="col-md-12">Prevalence of obesity around the world</h1>
+        <div class="row">
+            <h5 class="col-md-12">This graphic explores the global prevalence of obesity by age group, and how obesity has changed through time.  Use the dropdown menus to choose the country, obese or overweight, and year.  See how obesity has changed over time in a country by selecting “Animate Years.”  The country can also be selected by clicking directly on the map.</h5>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Country <select id="countryselect"></select></h5>
+            </div>
+            <div class="col-md-6">
+                <h5>Obese/Overweight <select id="obeseselect"></select></h5>
+            </div>
+            <div class="col-md-6">
+                <h5><input type="button" id="countryScaleButton" value="Scale Countries Relative to Global Median"/></select></h5>
+            </div>
+            <div class="col-md-6">
+                <h5>Year <select id="yearselect"><input type="button" id="animationButton" value="Animate Years"/></select></h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="world-map-with-aster" class="container-fluid">
+            <div class="world-map-container col-md-6">
+                <svg class="worldmap"></svg>
+                <div id="tooltip-container"></div>
+            </div>
+            <div class="spacer col-md-1">
+            </div>
+            <div class="asterArea col-md-4">
+                <h4 id="asterHeader"></h4>
+                <div id="asterObesity"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="footer">
     </div>
 
 </div>
@@ -34,6 +57,7 @@
 <!--libraries used-->
 <script src="https://code.jquery.com/jquery-2.0.0.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="//d3js.org/d3-geo-projection.v2.min.js"></script>
 <script src="lib/js/d3-tip-d3-v4.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="lib/js/colorbrewer.js"></script>

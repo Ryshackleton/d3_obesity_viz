@@ -24,6 +24,11 @@ d3.aster = function(options) {
             /* if true, shows an outline of the pie slices and the outer arc
              * css selector: .outlineArc */
             showOuterArc: false,
+    
+            /* if true, adds a label to the center of the plot,
+             labels can be modified using centerLabelTextFunc
+             css selector: .center-label-text */
+            showCenterLabel: false,
             
             /* if true, adds labels along the arc of the aster plot,
                 labels can be modified using arcLabelsTextFunc and arcLabelsTextFillFunc
@@ -51,6 +56,9 @@ d3.aster = function(options) {
                 return Math.min(this.width - this.margin.left - this.margin.right,
                                 this.height - this.margin.top - this.margin.bottom) / 2;
             },
+            
+            /* Return any text string for the center labels: HTML not allowed here */
+            centerLabelText: "",
             
             /* Return any text string: HTML not allowed here */
             arcLabelsTextFunc: function(d){ return d.data.label_arc_short; },
@@ -169,10 +177,12 @@ d3.aster = function(options) {
             fadeOutLabels(svg);
 
             // Otherwise, create the skeletal chart.
-            var gEnter = svg.enter().append("svg"); //.append("g");
+            var gEnter = svg.enter().append("svg");
             gEnter.append("g").attr("class", "outer-arcs-group");
             gEnter.append("g").attr("class", "pie-arcs-group");
             gEnter.append("g").attr("class", "pie-arcs-labels");
+            gEnter.append("g").attr("class", "pie-center-label").append("svg:text")
+                .attr("class", "center-label-text").attr("dy", ".35em").attr("text-anchor", "middle");
             
             tip.html(self.options.tooltipHTMLFunc);
             // re-select the svg (upon creation, svg will not have been appended)
@@ -225,7 +235,7 @@ d3.aster = function(options) {
 
             pathUpdate.exit().remove();
 
-
+            updateCenterLabelText(svg);
             updateArcLabels(pieData,svg);
             updateValueLabels(pieData,svg);
             updateOuterArc(pieData,svg);
@@ -427,6 +437,20 @@ d3.aster = function(options) {
         
         arcLabels.exit().remove();
     }
+    
+    function updateCenterLabelText(svg) {
+    
+        if( !self.options.showCenterLabel )
+            return;
+        
+        var g = svg.select(".pie-center-label")
+            .attr("transform", "translate(" + self.options.width / 2 + "," + self.options.height / 2 + ")");
+        
+        var labelText = trimTextToLength(self.options.centerLabelText,self.options.labelFontSizePercentageOfWidth,
+                                            self.options.innerRadius * 2);
+        g.select(".center-label-text")
+            .text(labelText);
+    }
    
     /* measure the length of a string in pixels:
      * http://stackoverflow.com/questions/16478836/measuring-length-of-string-in-pixel-in-javascript
@@ -533,7 +557,7 @@ d3.aster = function(options) {
         function tweenNarrow(b)
         {
             // narrow slices slightly while transition is occurring
-            var i = d3.interpolate({innerRadius: 0, padAngle: (b.endAngle - b.startAngle) * 0.2 }, b);
+            var i = d3.interpolate({innerRadius: 0, padAngle: (b.endAngle - b.startAngle) * 0.25 }, b);
         
             return function(t)
             {
@@ -628,6 +652,13 @@ d3.aster = function(options) {
         return my;
     };
     
+    my.showCenterLabel = function(d) {
+        if( arguments.length === 0 )
+            return self.options.showCenterLabel;
+        self.options.showCenterLabel = d;
+        return my;
+    };
+    
     my.showWidthLabels = function(d) {
         if( arguments.length === 0 )
             return self.options.showWidthLabels;
@@ -677,6 +708,13 @@ d3.aster = function(options) {
         if( typeof d !== "function" )
             throw new Error("Argument 'radiusFunc' must be a function");
         self.options.radiusFunc = d;
+        return my;
+    };
+    
+    my.centerLabelText = function(d) {
+        if( arguments.length === 0 )
+            return self.options.centerLabelText;
+        self.options.centerLabelText = d;
         return my;
     };
     

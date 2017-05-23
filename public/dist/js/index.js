@@ -10,6 +10,7 @@ var yearSelect = document.getElementById( 'yearselect' )
         .map(function(rgb) { return d3.hsl(rgb); })
     , asterColorFunction = d3.scaleLinear()
                             .range(asterColors)
+    , maxLocalData = 100;
 ;
 
 /* build selector with year list */
@@ -48,7 +49,7 @@ var startButton = document.getElementById("animationButton");
 setupAnimation();
 
 /* main method to initialize the bar chart and map */
-updateAsterAndMap();
+setupCountryMapAster();
 
 /* sets up the animation and sets up appropriate click events */
 function setupAnimation() {
@@ -88,24 +89,44 @@ function advanceYear() {
 
 /* sets up the bars and maps based on the 'page-content' width */
 function updateAsterAndMap() {
-
-  /** re-initialize world map
-   */
-  var bodyWidth = document.getElementById('page-content').offsetWidth;
-  worldMap.init(".worldmap", bodyWidth, bodyWidth / 3, atts());
+    /** re-initialize world map */
+    buildMap();
     
-  /* build selector with country list */
-  d3.json(['data','locations'].join('/'), function (error, data) {
-    if (error) {
-      console.error("index.js - Problem reading /data/locations/");
-    }
-    else {
-      if (countrySelect.options === undefined || countrySelect.options.length < 1) {
-        buildCountrySelect(data);
-      }
-    }
-      updateAsterPlot();
-  });
+    // updateAsterPlot();
+}
+
+function setupCountryMapAster()
+{
+    /** re-initialize world map */
+    /* build selector with country list */
+    d3.json(['data','locations'].join('/'), function (error, data)
+    {
+        if(error)
+        {
+            console.error("index.js - Problem reading /data/locations/");
+        }
+        else
+        {
+            // also grab the local data max to build appropriate colormaps
+            maxLocalData = d3.max(data, function(d) { return d.mean; });
+            
+            if(countrySelect.options === undefined || countrySelect.options.length < 1)
+            {
+                buildCountrySelect(data);
+            }
+        }
+    
+        buildMap();
+    });
+}
+
+function buildMap(){
+    // fire the aster plot update when the map update finishes
+    document.addEventListener('map_built', updateAsterPlot, false);
+    
+    var mapWidth = d3.select(".world-map-container").node().getBoundingClientRect().width;
+    var rowHeight = d3.select("#world-map-with-aster").node().getBoundingClientRect().height;
+    worldMap.init(".worldmap", mapWidth, rowHeight, getAtts());
 }
 
 /* sets the countrySelect to the specified country name */
@@ -137,13 +158,43 @@ function buildCountrySelect(data) {
   countrySelect.addEventListener("change",updateAsterAndMap);
 }
 
+function setAsterColorMap() {
+    // try to use the map's color scale for the aster plot, if the map has been built
+    if( typeof worldMap.getColorScale() == "function" )
+    {
+        asterColorFunction = worldMap.getColorScale();
+    }
+    // otherwise, use the local maximum data value
+    else
+    {
+        var  selectedAtts = getAtts();
+        d3.json(['data','means',selectedAtts.year,selectedAtts.obese_overweight].join("/")
+            ,function(error, meanData)
+            {
+                if(error)
+                {
+                    console.error("BARCHART.obesity.graphUpdate(); - Problem reading csv file. Check file path.");
+                    return;
+                }
+                var fi = meanData.find(function(d) { return selectedAtts.countrycode === d.countrycode; });
+                var md = maxLocalData = +fi.mean < 0 ? +fi.mean : 100;
+                asterColorFunction
+                    .domain([0.0, md * 0.1, md * 0.2, md * 0.3, md * 0.4, md * 0.5, md * 0.6, md * 0.7, 2]);
+            });
+    }
+}
+
 /* updates the bar graph with the currently selected attributes */
 function updateAsterPlot() {
+    
+    // scale to row height
+    var asterWH = 0.9 * d3.select("#world-map-with-aster").node().getBoundingClientRect().height;
     if( asterPlot === undefined )
     {
         var asterOptions = {
-            width: 400,
-            height: 400,
+            width: asterWH,
+            height: asterWH,
+            showCenterLabel: true,
             showHeightLabels: true,
             showWidthLabels: true,
             showOuterArc: false,
@@ -186,13 +237,13 @@ function updateAsterPlot() {
         asterPlot.tooltipHTMLFunc(myTooltipFunction);
     }
     
-    var bodyWidth = document.getElementById('page-content').offsetWidth;
-    asterPlot.width(bodyWidth * 0.35);
-    asterPlot.height(bodyWidth * 0.35);
-    asterPlot.innerRadius(asterPlot.width() * 0.1);
+    asterPlot.width(asterWH);
+    asterPlot.height(asterWH);
+    asterPlot.innerRadius(asterWH * 0.2);
     
-    var atts = this.atts();
+    setAsterColorMap();
     
+    var atts = getAtts();
     d3.json(['data','agegroup',atts.countrycode,atts.year,atts.obese_overweight].join('/'), function(error,data)
         {
             if(error)
@@ -200,11 +251,7 @@ function updateAsterPlot() {
                 console.error("index.updateAsterPlot(); - Problem reading json from server.");
                 return;
             }
-    
-            var md = d3.max(data, function(d) { return d.mean; });
-            asterColorFunction
-                .domain([0.0, md * 0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7, 2]);
-    
+            
             var countryFull = "null";
             data = data.map(function(d) {
                 countryFull = d.countryname;
@@ -217,18 +264,19 @@ function updateAsterPlot() {
                     obese_overweight: d.obese_overweight
                 };
             });
+    
+            asterPlot.centerLabelText(countryFull);
+            d3.select("#asterHeader")
+                .text("Percentage of "+atts.obese_overweight+" people in each age group for "+ countryFull);
             
-            d3.select(".asterHeader")
-                .text("Prevalence of "+atts.obese_overweight+" population by age in "+ countryFull);
-            
-            d3.select(".obesityAster")
+            d3.select("#asterObesity")
                 .datum(data)
                 .call(asterPlot);
         });
 }
 
 /* returns an object with the currently selected attribute values */
-function atts() {
+function getAtts() {
   return {
     countrycode: countrySelect.value,
     sex: "both",

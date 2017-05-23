@@ -12,13 +12,15 @@ MAP.worldClickable = function() {
     , mMapSelection
     , mProjection
     , mPath
+    , mColorScale
     , mCountryMeans = {}
     , mScaleDenom = 1.0
-    , mIsMapScaled = false;
+    , mIsMapScaled = false
+    , mBuiltEvent = new CustomEvent('map_built');
 
   /***** PUBLIC ******/
-  var mMapDivTag = ".worldmap"
-
+  var mMapDivTag = ".worldmap";
+  
   var countryScale = function(d) {
       if( mIsMapScaled ) {
         var cent = mPath.centroid(d);
@@ -49,8 +51,8 @@ MAP.worldClickable = function() {
     });
     mIsMapScaled = !mIsMapScaled;
   };
-
-  var init = function(divTag,width,height,selectedAtts) {
+  
+  var render = function(divTag,width,height,selectedAtts) {
 
     mMapDivTag = divTag;
     mWidth = width;
@@ -61,10 +63,9 @@ MAP.worldClickable = function() {
         .attr("width", mWidth)
         .attr("height", mHeight);
     
-    mProjection = d3.geoEquirectangular()
-    // mProjection = d3.geoCylindricalEqualArea()
-        .scale((mWidth) / 3.5 / Math.PI)
-        .translate([mWidth / 3.5, mHeight / 2])
+    mProjection = d3.geoCylindricalEqualArea()
+        .scale(mWidth / 1.5 / Math.PI)
+        .translate([mWidth / 2, mHeight / 2])
         .precision(.1);
 
     mPath = d3.geoPath()
@@ -118,7 +119,7 @@ MAP.worldClickable = function() {
     
           var md = d3.max(meanData, function(d) { return d.mean; });
           mScaleDenom = d3.median(meanData, function(d) { return d.mean; });
-          var color = d3.scaleLinear()
+          mColorScale = d3.scaleLinear()
               .range(colors)
               // adding a 2 here at the end of the scale for "no data" values
               .domain([0.0, md*0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7,md*0.8, 100.0]);
@@ -126,17 +127,17 @@ MAP.worldClickable = function() {
           /* legend help from: http://zeroviscosity.com/d3-js-step-by-step/step-3-adding-a-legend */
           svg.selectAll('.legend').remove(); // remove any existing legend
     
-          var legendRectSize = mHeight * 0.8 / color.domain().length;
+          var legendRectSize = mHeight * 0.8 / mColorScale.domain().length;
           var legendSpacing = 0;
           var legend = svg.selectAll('.legend')
               .append('title')
-              .data(color.domain())
+              .data(mColorScale.domain())
               .enter()
               .append('g')
               .attr('class', 'legend')
               .attr('transform', function(d, i) {
                   var height = legendRectSize + legendSpacing;
-                  var offset =  height * color.domain().length / 2;
+                  var offset =  height * mColorScale.domain().length / 2;
                   var horz = 0.3 * legendRectSize;
                   var vert = mHeight / 2 + i * height - offset;
                   return 'translate(' + horz + ',' + vert + ')'});
@@ -144,7 +145,7 @@ MAP.worldClickable = function() {
           legend.append('rect')
               .attr('width', legendRectSize)
               .attr('height', legendRectSize)
-              .style('fill', color)
+              .style('fill', mColorScale)
               .style('stroke', 'black');
     
           legend.append('text')
@@ -170,7 +171,7 @@ MAP.worldClickable = function() {
               .attr("class", "active")
               .attr("fill", function (d) {
                   return mCountryMeans.hasOwnProperty(d.properties.adm0_a3)
-                      ? color(mCountryMeans[d.properties.adm0_a3]) : color(100);
+                      ? mColorScale(mCountryMeans[d.properties.adm0_a3]) : mColorScale(100);
               })
               .attr("fill-opacity", "0.95")
               .attr("stroke-width",function(d) {
@@ -243,15 +244,19 @@ MAP.worldClickable = function() {
               .attr("d", mPath.projection(mProjection));
         });
     svg.call(zoom);
-  }
+    
+    // d3.select(mMapDivTag).node().dispatchEvent(mBuiltEvent);
+      document.dispatchEvent(mBuiltEvent);
+  };
 
   return {
     /* variables */
     mMapDivTag: mMapDivTag,
 
     /* functions */
-    init: init,
-    toggleMapScale: toggleMapScale
+    init: render,
+    toggleMapScale: toggleMapScale,
+    getColorScale: function(){ return mColorScale; }
   };
 
 }();

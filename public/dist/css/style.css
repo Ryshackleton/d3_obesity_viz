@@ -2,55 +2,36 @@
 body {
   text-align: center;
 }
-#page-content {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+
+select, input, button {
+  margin-left: 1%;
+  margin-right: 1%;
 }
-ol {
-  margin: auto, auto;
+
+.container-fluid {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-right: 10%;
+  padding-left: 10%;
 }
-ol li {
-  list-style-position: inside; 
+
+.center-label-text {
+  font-size: large;
 }
-ul {
-  list-style-type: none;
+
+#world-map-with-aster {
+  height: 60vh;
 }
-ul li {
-  float: left;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: auto;
-  margin-top: auto;
-  vertical-align: center;
+
+.world-map-container {
+  height: inherit;
 }
 
 .worldmap {
-  width: 55%;
-  display: inline;
-  float: left;
   border-style: solid;
   border-color: steelblue;
-}
-
-.asterArea{
-  width: 30%;
-  height: inherit;
-  display: inline-block;
-  /*float: left;*/
-  margin-left:10px;
-  margin-right: 10px;
-}
-
-.asterHeader {
-  display: block;
-  height: 0.1%;
-}
-
-.obesityAster{
-  /*float: left;*/
-  margin-left:10px;
-  margin-right: 10px;
+  border-width: medium;
+  border-radius: 1%;
 }
 
 #countries {
@@ -64,6 +45,7 @@ ul li {
 #countries .active {
   fill: #89a;
 }
+
 #tooltip-container {
   position: absolute;
   background-color: #fff;
@@ -72,6 +54,7 @@ ul li {
   border: 1px solid;
   display: none;
 }
+
 .background {
   fill: none;
   pointer-events: all;
@@ -82,4 +65,8 @@ ul li {
 .tooltip_value {
   margin-left: 20px;
   float: right;
+}
+
+#footer {
+  height: 5vh;
 }
