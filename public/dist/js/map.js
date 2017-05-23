@@ -63,8 +63,8 @@ MAP.worldClickable = function() {
     
     mProjection = d3.geoEquirectangular()
     // mProjection = d3.geoCylindricalEqualArea()
-        .scale((mWidth + 1) / 2 / Math.PI)
-        .translate([mWidth / 2, mHeight / 2])
+        .scale((mWidth) / 3.5 / Math.PI)
+        .translate([mWidth / 3.5, mHeight / 2])
         .precision(.1);
 
     mPath = d3.geoPath()

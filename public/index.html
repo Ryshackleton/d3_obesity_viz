@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>D3 Bar Chart</title>
-      <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="lib/css/d3-tip-v4.css">
+    <link rel="stylesheet" href="lib/css/aster.css">
 </head>
 
 <body>
@@ -18,22 +20,31 @@
     </ul>
     <div id="tooltip-container"></div>
 
-    <svg class="worldmap"></svg>
 
-    <div class="chartArea">
-        <div class="obesityBar"></div>
+    <div class="map-and-aster-container">
+        <svg class="worldmap"></svg>
+        <div class="asterArea">
+            <h4 class="asterHeader"></h4>
+            <div class="obesityAster"></div>
+        </div>
     </div>
 
 </div>
 
+<!--libraries used-->
 <script src="https://code.jquery.com/jquery-2.0.0.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="lib/js/d3-tip-d3-v4.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
-<script src="js/colorbrewer.js"></script>
+<script src="lib/js/colorbrewer.js"></script>
+<script src="lib/js/merge-sort.js"></script>
 
-<script src="js/barchart.js"></script>
-<script src="js/map.js"></script>
-<script src="js/index.js"></script>
+<!--custom scripts for this viz-->
+<script src="dist/js/aster.js"></script>
+<script src="dist/js/map.js"></script>
+<script src="dist/js/index.js"></script>
+
+
 
 </body>
 </html>

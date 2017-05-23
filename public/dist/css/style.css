@@ -26,19 +26,31 @@ ul li {
 }
 
 .worldmap {
-  width: 45%;
+  width: 55%;
   display: inline;
   float: left;
   border-style: solid;
   border-color: steelblue;
 }
 
-.chartArea{
-  width: 45%;
-  display: inline;
-  float: right;
-  margin-left:auto;
-  margin-right: auto;
+.asterArea{
+  width: 30%;
+  height: inherit;
+  display: inline-block;
+  /*float: left;*/
+  margin-left:10px;
+  margin-right: 10px;
+}
+
+.asterHeader {
+  display: block;
+  height: 0.1%;
+}
+
+.obesityAster{
+  /*float: left;*/
+  margin-left:10px;
+  margin-right: 10px;
 }
 
 #countries {
