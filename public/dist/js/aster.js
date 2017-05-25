@@ -509,7 +509,6 @@ d3.aster = function(options) {
         
         heightScale
             .range([self.options.radiusFunc() * 0.3, self.options.radiusFunc() - self.options.innerRadius]);
-        
     }
     
     function getDelayFunction() {

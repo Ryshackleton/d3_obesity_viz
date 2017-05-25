@@ -170,7 +170,6 @@ function updateCountrySelect(newCountryCode) {
 
 /* updates the bar graph with the currently selected attributes */
 function updateAsterPlot() {
-    
     // set the aster color map to the colormap of the map view
     setAsterColorMap();
     
@@ -184,14 +183,15 @@ function updateAsterPlot() {
         // scale to row height
         var asterWH = 0.9 * d3.select("#world-map-with-aster").node().getBoundingClientRect().height;
     
-        // transition different from opening transition
-        asterPlot.transitionMethod("narrowSlice");
-        asterPlot.transitionDelay(asterPlot.defaultOptions().transitionDelay);
-        asterPlot.transitionDuration(asterPlot.defaultOptions().transitionDuration);
         // set some sizing attributes
         asterPlot.width(asterWH);
         asterPlot.height(asterWH);
-        asterPlot.innerRadius(asterWH * 0.2);
+        asterPlot.innerRadius(asterWH * 0.1);
+        // transition different from opening transition
+        asterPlot.transitionMethod("narrowSlice");
+        // ensure default transition and delay
+        asterPlot.transitionDelay(asterPlot.defaultOptions().transitionDelay);
+        asterPlot.transitionDuration(asterPlot.defaultOptions().transitionDuration);
     }
     
     // get the appropriate age data from server based on selected attributes
@@ -243,7 +243,7 @@ function updateAsterPlot() {
                 {
                     if(error)
                     {
-                        console.error("BARCHART.obesity.graphUpdate(); - Problem reading csv file. Check file path.");
+                        console.error("index.setAsterColormap(); - Problem getting data from server.");
                         return;
                     }
                     var fi = meanData.find(function(d) { return selectedAtts.countrycode === d.countrycode; });
@@ -265,7 +265,7 @@ function updateAsterPlot() {
             showHeightLabels: true,
             showWidthLabels: true,
             showOuterArc: false,
-            innerRadius: 50,
+            innerRadius: asterWH * 0.1,
             transitionMethod: "sweepSlice",
             transitionDelay: 30,
             transitionDuration: 50
@@ -305,5 +305,6 @@ function updateAsterPlot() {
         };
         asterPlot.tooltipHTMLFunc(myTooltipFunction);
     }
+
 }
 
