@@ -120,9 +120,9 @@ MAP.worldClickable = function() {
                     var md = d3.max(meanData, function(d) { return d.mean; });
                     mScaleDenom = d3.median(meanData, function(d) { return d.mean; });
                     mColorScale = d3.scaleLinear()
-                        .range(colors)
                         // adding a 2 here at the end of the scale for "no data" values
-                        .domain([0.0, md*0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7,md*0.8, 100.0]);
+                        .domain([0.0, md*0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7,md*0.8, md*0.9, md, 100.0])
+                        .range(colors);
                     
                     /* legend help from: http://zeroviscosity.com/d3-js-step-by-step/step-3-adding-a-legend */
                     svg.selectAll('.legend').remove(); // remove any existing legend

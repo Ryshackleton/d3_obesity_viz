@@ -248,7 +248,7 @@ function updateAsterPlot() {
                     var fi = meanData.find(function(d) { return selectedAtts.countrycode === d.countrycode; });
                     var md = maxLocalData = +fi.mean < 0 ? +fi.mean : 100;
                     asterColorFunction
-                        .domain([0.0, md * 0.1, md * 0.2, md * 0.3, md * 0.4, md * 0.5, md * 0.6, md * 0.7, 2]);
+                        .domain([0.0, md*0.1, md*0.2, md*0.3, md*0.4, md*0.5, md*0.6, md*0.7,md*0.8, md*0.9, md, 100.0]);
                 });
         }
     }
