@@ -20,6 +20,7 @@ d3.aster = function(options) {
             width: 500,
             height: 500,
             innerRadius: 0, // defines the radius of empty space in the center of the plot
+            heightDomain: null, // user settable height domain [min, max]
             
             /* if true, shows an outline of the pie slices and the outer arc
              * css selector: .outlineArc */
@@ -165,11 +166,8 @@ d3.aster = function(options) {
                 data = data.mergeSort(self.options.pieSortFunc);
             }
     
-            // get data range and update the height scale and arc generators appropriately
-            var hmin = d3.min(data,function(d){ return +d.height_var; });
-            var hmax = d3.max(data,function(d){ return +d.height_var; });
-            heightScale.domain([hmin,hmax])
-                        .range([self.options.radiusFunc()*0.3,self.options.radiusFunc()-self.options.innerRadius]);
+            updateHeightScale(data);
+            
             updateArcs();
             
             // Select the svg element, if it exists.
@@ -492,6 +490,28 @@ d3.aster = function(options) {
                     .outerRadius(self.options.radiusFunc())
     }
     
+    function updateHeightScale(data) {
+        // get data range and update the height scale and arc generators appropriately
+        if( self.options.heightDomain === null )
+        {
+            var hmin = d3.min(data, function(d)
+            {
+                return +d.height_var;
+            });
+            var hmax = d3.max(data, function(d)
+            {
+                return +d.height_var;
+            });
+            heightScale.domain([hmin, hmax])
+        }
+        else
+            heightScale.domain(self.options.heightDomain);
+        
+        heightScale
+            .range([self.options.radiusFunc() * 0.3, self.options.radiusFunc() - self.options.innerRadius]);
+        
+    }
+    
     function getDelayFunction() {
         switch (self.options.transitionMethod) {
             case 'sweepSlice':
@@ -621,6 +641,16 @@ d3.aster = function(options) {
         if( arguments.length === 0 )
             return self.options.innerRadius;
         self.options.innerRadius = d;
+        return my;
+    };
+    
+    my.heightDomain = function(d) {
+        if( arguments.length === 0 )
+            return self.options.heightDomain;
+        if( d.constructor === Array && d.length === 2 )
+            self.options.heightDomain = d;
+        else
+            throw new TypeError("Argument 'heightDomain' must be an array of size 2");
         return my;
     };
     

@@ -16,9 +16,9 @@
 	font-style: normal;
 	font-variant: normal;
 	font-weight: bold;
-  stroke-width: 0.5;
-  stroke: gray;
   -webkit-text-stroke: 0.5px gray;
+  stroke-width: 0.3;
+  stroke: black;
 }
 
 .height-data-labels-text {
@@ -28,5 +28,7 @@
   font-variant: normal;
   font-weight: 400;
   line-height: 20px;
+  stroke-width: 0.25;
+  stroke: gray;
 }
 
