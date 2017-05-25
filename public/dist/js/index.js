@@ -171,6 +171,9 @@ function updateCountrySelect(newCountryCode) {
 /* updates the bar graph with the currently selected attributes */
 function updateAsterPlot() {
     
+    // set the aster color map to the colormap of the map view
+    setAsterColorMap();
+    
     // if not built, build
     if( asterPlot === undefined )
     {
@@ -190,8 +193,6 @@ function updateAsterPlot() {
         asterPlot.height(asterWH);
         asterPlot.innerRadius(asterWH * 0.2);
     }
-    
-    setAsterColorMap();
     
     // get the appropriate age data from server based on selected attributes
     var atts = getAtts();
@@ -304,6 +305,5 @@ function updateAsterPlot() {
         };
         asterPlot.tooltipHTMLFunc(myTooltipFunction);
     }
-
 }
 
