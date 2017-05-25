@@ -11,7 +11,8 @@ var yearSelect = document.getElementById( 'yearselect' )
                                 .map(function(rgb) { return d3.hsl(rgb); })
     , asterColorFunction = d3.scaleLinear()
                                 .range(asterColors)
-    , maxLocalData = 100;
+    , maxLocalData = 100
+    , clickOrTouchEvent = isMobile.any ? "touchstart" : "click"
 ;
 
 /* builds all ui components */
@@ -44,7 +45,7 @@ function buildUI() {
     var countryScaleButton = document.getElementById("countryScaleButton");
     function setupScale() {
         if(countryScaleButton.addEventListener) {
-            countryScaleButton.addEventListener("click", worldMap.toggleMapScale);
+            countryScaleButton.addEventListener(clickOrTouchEvent, worldMap.toggleMapScale);
         }
     }
     setupScale();
@@ -63,14 +64,14 @@ function buildUI() {
 function setupAnimation() {
     startButton.value = "Animate Years";
     if(startButton.addEventListener) {
-        startButton.addEventListener("click", startAnim);
+        startButton.addEventListener(clickOrTouchEvent, startAnim);
     }
     /* starts animation and sets up appropriate click events */
     function startAnim() {
         startButton.value = "Stop Animation";
         if(startButton.addEventListener) {
-            startButton.removeEventListener("click", startAnim);
-            startButton.addEventListener("click", stopAnim);
+            startButton.removeEventListener(clickOrTouchEvent, startAnim);
+            startButton.addEventListener(clickOrTouchEvent, stopAnim);
         }
         advanceYear();
     }
