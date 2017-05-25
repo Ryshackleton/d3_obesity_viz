@@ -445,7 +445,7 @@ d3.aster = function(options) {
             .attr("transform", "translate(" + self.options.width / 2 + "," + self.options.height / 2 + ")");
         
         var labelText = trimTextToLength(self.options.centerLabelText,self.options.labelFontSizePercentageOfWidth,
-                                            self.options.innerRadius * 2);
+                                            self.options.innerRadius);
         g.select(".center-label-text")
             .text(labelText);
     }

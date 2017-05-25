@@ -187,7 +187,7 @@ function updateAsterPlot() {
         // set some sizing attributes
         asterPlot.width(asterWH);
         asterPlot.height(asterWH);
-        asterPlot.innerRadius(asterWH * 0.1);
+        asterPlot.innerRadius(asterWH * 0.15);
         // transition different from opening transition
         asterPlot.transitionMethod("narrowSlice");
         // ensure default transition and delay
@@ -266,7 +266,7 @@ function updateAsterPlot() {
             showHeightLabels: true,
             showWidthLabels: true,
             showOuterArc: false,
-            innerRadius: asterWH * 0.1,
+            innerRadius: asterWH * 0.15,
             transitionMethod: "sweepSlice",
             transitionDelay: 30,
             transitionDuration: 50
